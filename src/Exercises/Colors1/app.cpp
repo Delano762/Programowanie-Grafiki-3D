@@ -24,15 +24,15 @@ void SimpleShapeApplication::init() {
     }
 
     std::vector<GLfloat> vertices = {
-            -0.5f, 0.0f, 0.0f,
-            0.5f, 0.0f, 0.0f,
-            0.0f, 0.5f, 0.0f,
-            -0.4f, 0.0f, 0.0f,
-            -0.4f, -0.5f, 0.0f,
-            0.4f, -0.5f, 0.0f,
-            -0.4f, 0.0f, 0.0f,
-            0.4f, -0.5f, 0.0f,
-            0.4f, 0.0f, 0.0f,
+            -0.5f, 0.0f, 0.0f, 0.8f, 0.5f, 0.3f,
+            0.5f, 0.0f, 0.0f, 0.8f, 0.5f, 0.3f,
+            0.0f, 0.5f, 0.0f, 0.8f, 0.5f, 0.3f,
+            -0.4f, 0.0f, 0.0f, 0.6f, 0.9f, 0.1f,
+            -0.4f, -0.5f, 0.0f, 0.6f, 0.9f, 0.1f,
+            0.4f, -0.5f, 0.0f, 0.6f, 0.9f, 0.1f,
+            -0.4f, 0.0f, 0.0f, 0.8f, 0.3f, 0.6f,
+            0.4f, -0.5f, 0.0f, 0.8f, 0.3f, 0.6f,
+            0.4f, 0.0f, 0.0f, 0.8f, 0.3f, 0.6f
     };
 
 
@@ -46,8 +46,14 @@ void SimpleShapeApplication::init() {
     glGenVertexArrays(1, &vao_);
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER, v_buffer_handle);
+
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), reinterpret_cast<GLvoid *>(0));
+    // Define an array of generic vertex attribute data (index, size, type, normalized, stride, pointer)
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<GLvoid *>(0));
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<GLvoid *>(3 * sizeof(GLfloat)));
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
