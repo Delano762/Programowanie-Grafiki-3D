@@ -27,3 +27,7 @@ add_subdirectory(src/Application)
 
 link_libraries(application)
 add_subdirectory(src/Exercises/Triangle)
+add_subdirectory(src/Exercises/Uniforms)
+add_subdirectory(src/Exercises/Indices)
+add_subdirectory(src/Exercises/Colors)
+add_subdirectory(src/Exercises/PVM)
