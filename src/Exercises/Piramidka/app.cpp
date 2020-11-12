@@ -97,14 +97,6 @@ void SimpleShapeApplication::init() {
 
     GLuint u_buffer_handle;
     glGenBuffers(1, &u_buffer_handle);
-    glBindBuffer(GL_UNIFORM_BUFFER, u_buffer_handle);
-    float strength = 0.5;
-    float light[3] = {0.7, 0.2, 0.3};
-    glBufferData(GL_UNIFORM_BUFFER, 8 * sizeof(float), nullptr, GL_STATIC_DRAW);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float),&strength);
-    glBufferSubData(GL_UNIFORM_BUFFER, 4 * sizeof(float), 3 * sizeof(float), light);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, u_buffer_handle);
 
     auto u_transformations_index = glGetUniformBlockIndex(program, "Transformations");
     if (u_transformations_index == GL_INVALID_INDEX)
@@ -121,9 +113,10 @@ void SimpleShapeApplication::init() {
     std::tie(w, h) = frame_buffer_size();
 
     glm::mat4 M(1.0f);
-    auto V = glm::lookAt(glm::vec3{0,1.1,3.0},glm::vec3{0.0,0.0,0.0},glm::vec3{1.0,1.0,1.0});
+    auto V = glm::lookAt(glm::vec3{0.2,1.1,3.0},glm::vec3{0.0,0.0,0.0},glm::vec3{1.0,1.0,1.0});
     auto P = glm::perspective(glm::half_pi<float>(),(float)w/h,0.1f,100.0f);
 
+    glBindBuffer(GL_UNIFORM_BUFFER,u_buffer_handle);
     glBufferData(GL_UNIFORM_BUFFER,2*sizeof(glm::mat4), nullptr,GL_STATIC_DRAW);
 
     glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(glm::mat4),&P[0]);
