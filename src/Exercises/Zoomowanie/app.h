@@ -13,6 +13,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "glad/glad.h"
+#include "camera.h"
 
 class SimpleShapeApplication : public xe::Application {
 public:
@@ -23,15 +24,18 @@ public:
 
     void frame() override;
 
-    float fov_;
-    float aspect_;
-    float near_;
-    float far_;
+    Camera *camera_;
 
-    glm::mat4 P_;
-    glm::mat4 V_;
+    void set_camera(Camera *camera) { camera_ = camera; }
+    Camera *camera() { return camera_; }
+    ~SimpleShapeApplication() {
+        if (camera_) {
+            delete camera_;
+        }
+    }
 
     void framebuffer_resize_callback(int w, int h) override;
+    void scroll_callback(double xoffset, double yoffset) override;
 
 private:
     GLuint vao_;

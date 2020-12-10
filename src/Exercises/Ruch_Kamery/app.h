@@ -14,6 +14,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "glad/glad.h"
 #include "camera.h"
+#include "camera_controller.h"
 
 class SimpleShapeApplication : public xe::Application {
 public:
@@ -24,15 +25,24 @@ public:
 
     void frame() override;
 
+    void mouse_button_callback(int button, int action, int mods) override;
+
+    void cursor_position_callback(double x, double y) override;
+
     Camera *camera_;
+
+    CameraController *controller_;
 
     void set_camera(Camera *camera) { camera_ = camera; }
     Camera *camera() { return camera_; }
+
     ~SimpleShapeApplication() {
         if (camera_) {
             delete camera_;
         }
     }
+
+    void set_controller(CameraController *controller) { controller_ = controller; }
 
     void framebuffer_resize_callback(int w, int h) override;
     void scroll_callback(double xoffset, double yoffset) override;

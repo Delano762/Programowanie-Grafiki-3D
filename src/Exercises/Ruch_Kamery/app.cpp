@@ -103,6 +103,8 @@ void SimpleShapeApplication::init() {
 
     set_camera(new Camera);
 
+    set_controller(new CameraController(camera()));
+
     camera_->perspective(glm::pi<float>()/4.0, (float)w/h, 0.1f, 100.0f);
     camera_->look_at(glm::vec3(1.0f, 1.0f, 3.0f),
                      glm::vec3(0.5f, 0.5f, 0.0f),
@@ -143,4 +145,27 @@ void SimpleShapeApplication::frame() {
 
     glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES,18,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
+}
+
+void SimpleShapeApplication::mouse_button_callback(int button, int action, int mods) {
+    Application::mouse_button_callback(button, action, mods);
+
+    if (controller_) {
+        double x, y;
+        glfwGetCursorPos(window_, &x, &y);
+
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+            controller_->LMB_pressed(x, y);
+
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+            controller_->LMB_released(x, y);
+    }
+
+}
+
+void SimpleShapeApplication::cursor_position_callback(double x, double y) {
+    Application::cursor_position_callback(x, y);
+    if (controller_) {
+        controller_->mouse_moved(x, y);
+    }
 }

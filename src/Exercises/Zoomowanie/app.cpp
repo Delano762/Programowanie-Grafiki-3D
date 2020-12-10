@@ -25,9 +25,9 @@ void SimpleShapeApplication::init() {
         std::cerr << std::string(PROJECT_DIR) + "/shaders/base_fs.glsl" << " shader files" << std::endl;
     }
 
-    std::vector<GLushort > indices(21);
+    std::vector<GLushort > indices(18);
 
-    for(int i=0;i<21;i++)
+    for(int i=0;i<18;i++)
         indices[i]=i;
 
     GLuint idx_buffer_handl;
@@ -62,15 +62,6 @@ void SimpleShapeApplication::init() {
             1, 0, 0, 0.5f, 0.5f, 1.0f,
             0.5, 0.5, 1, 0.5f, 0.5f, 1.0f,
 
-            //-0.4f, -0.5f, 0.0f,  0.8f, 0.5f, 0.3f,
-            //0.4f, -0.5f, 0.0f,  0.8f, 0.5f, 0.3f,
-
-            //-0.4f, 0.0f, 0.0f,  0.8f, 0.5f, 0.3f,
-            //-0.4f, -0.5f, 0.0f,  0.8f, 0.5f, 0.3f,
-            //0.4f, -0.5f, 0.0f,  0.8f, 0.5f, 0.3f,
-            //-0.4f, 0.0f, 0.0f,  0.8f, 0.5f, 0.3f,
-            //0.4f, -0.5f, 0.0f,  0.8f, 0.5f, 0.3f,
-            //0.4f, 0.0f, 0.0f,  0.8f, 0.5f, 0.3f,
     };
 
 
@@ -78,7 +69,6 @@ void SimpleShapeApplication::init() {
     glGenBuffers(1, &v_buffer_handle);
     glBindBuffer(GL_ARRAY_BUFFER, v_buffer_handle);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenVertexArrays(1, &vao_);
     glBindVertexArray(vao_);
@@ -110,49 +100,47 @@ void SimpleShapeApplication::init() {
     glClearColor(0.81f, 0.81f, 0.8f, 1.0f);
     int w, h;
     std::tie(w, h) = frame_buffer_size();
-    aspect_ = (float)w/h;
-    fov_ = glm::pi<float>()/4.0;
-    near_ = 0.1f;
-    far_ = 100.0f;
-    P_ = glm::perspective(fov_, aspect_, near_, far_);
-    V_ = glm::lookAt(glm::vec3{0,1.1,3.0},glm::vec3{0.0,0.0,1.0},glm::vec3{1.0,1.0,1.0});
-    glm::mat4 M(1.0f);
+
+    set_camera(new Camera);
+
+    camera_->perspective(glm::pi<float>()/4.0, (float)w/h, 0.1f, 100.0f);
+    camera_->look_at(glm::vec3(1.0f, 1.0f, 3.0f),
+                     glm::vec3(0.5f, 0.5f, 0.0f),
+                     glm::vec3(0.0f, 1.0f, 0.0f));
 
     glBindBuffer(GL_UNIFORM_BUFFER,u_pvm_buffer_);
     glBufferData(GL_UNIFORM_BUFFER,2*sizeof(glm::mat4), nullptr,GL_STATIC_DRAW);
 
-    glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(glm::mat4),&P_[0]);
-    glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4),sizeof(glm::mat4),&V_[0]);
+    //glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(glm::mat4),&P_[0]);
+    //glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4),sizeof(glm::mat4),&V_[0]);
 
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     glBindBufferBase(GL_UNIFORM_BUFFER,1,u_pvm_buffer_);
-
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
-
-    glViewport(0, 0, w, h);
 
     glEnable(GL_DEPTH_TEST);
     glUseProgram(program);
 }
 
+void SimpleShapeApplication::scroll_callback(double xoffset, double yoffset) {
+    Application::scroll_callback(xoffset, yoffset);
+    camera()->zoom(yoffset / 30.0f);
+}
+
 void SimpleShapeApplication::framebuffer_resize_callback(int w, int h) {
     Application::framebuffer_resize_callback(w, h);
     glViewport(0,0,w,h);
-    aspect_ = (float) w / h;
-    P_ = glm::perspective(fov_, aspect_, near_, far_);
+    camera_->perspective(glm::pi<float>()/4.0, (float)w/h, 0.1f, 100.0f);
 }
 
 void SimpleShapeApplication::frame() {
 
-    auto PVM = P_ * V_;
+    auto PVM = camera_->projection()*camera_->view();
     glBindBuffer(GL_UNIFORM_BUFFER, u_pvm_buffer_);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &PVM[0]);
+
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, u_pvm_buffer_);
 
     glBindVertexArray(vao_);
-    // glDrawArrays(GL_TRIANGLES, 0, 9);
-    glDrawElements(GL_TRIANGLES,21,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
-    glBindVertexArray(0);
+    glDrawElements(GL_TRIANGLES,18,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
 }
