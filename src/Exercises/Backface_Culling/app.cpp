@@ -25,9 +25,9 @@ void SimpleShapeApplication::init() {
         std::cerr << std::string(PROJECT_DIR) + "/shaders/base_fs.glsl" << " shader files" << std::endl;
     }
 
-    std::vector<GLushort > indices(21);
+    std::vector<GLushort > indices(18);
 
-    for(int i=0;i<21;i++)
+    for(int i=0;i<18;i++)
         indices[i]=i;
 
     GLuint idx_buffer_handl;
@@ -38,13 +38,13 @@ void SimpleShapeApplication::init() {
 
 
     std::vector<GLfloat> vertices = {
-            0, 1, 0, 0.3f, 0.5f, 0.1f,
-            0, 0, 0, 0.3f, 0.5f, 0.1f,
             1, 0, 0, 0.3f, 0.5f, 0.1f,
+            0, 0, 0, 0.3f, 0.5f, 0.1f,
+            0, 1, 0, 0.3f, 0.5f, 0.1f,
 
-            0, 1, 0, 0.8f, 0.5f, 0.3f,
-            1, 0, 0, 0.8f, 0.5f, 0.3f,
             1, 1, 0, 0.8f, 0.5f, 0.3f,
+            1, 0, 0, 0.8f, 0.5f, 0.3f,
+            0, 1, 0, 0.8f, 0.5f, 0.3f,
 
             0, 1, 0, 0.0f, 0.5f, 0.3f,
             0, 0, 0, 0.0f, 0.5f, 0.3f,
@@ -113,7 +113,7 @@ void SimpleShapeApplication::init() {
     std::tie(w, h) = frame_buffer_size();
 
     glm::mat4 M(1.0f);
-    auto V = glm::lookAt(glm::vec3{0,1.1,3.0},glm::vec3{0.0,0.0,1.0},glm::vec3{1.0,1.0,1.0});
+    auto V = glm::lookAt(glm::vec3{-1,-1.5,-1.0},glm::vec3{0.0,0.0,1.0},glm::vec3{-1.0,-1.0,-1.0});
     auto P = glm::perspective(glm::half_pi<float>(),(float)w/h,0.1f,100.0f);
 
     glBindBuffer(GL_UNIFORM_BUFFER,u_buffer_handle);
@@ -138,6 +138,6 @@ void SimpleShapeApplication::init() {
 void SimpleShapeApplication::frame() {
     glBindVertexArray(vao_);
     // glDrawArrays(GL_TRIANGLES, 0, 9);
-    glDrawElements(GL_TRIANGLES,21,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
+    glDrawElements(GL_TRIANGLES,18,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
     glBindVertexArray(0);
 }

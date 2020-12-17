@@ -25,9 +25,9 @@ void SimpleShapeApplication::init() {
         std::cerr << std::string(PROJECT_DIR) + "/shaders/base_fs.glsl" << " shader files" << std::endl;
     }
 
-    std::vector<GLushort > indices(21);
+    std::vector<GLushort > indices(18);
 
-    for(int i=0;i<21;i++)
+    for(int i=0;i<18;i++)
         indices[i]=i;
 
     GLuint idx_buffer_handl;
@@ -153,6 +153,6 @@ void SimpleShapeApplication::frame() {
 
     glBindVertexArray(vao_);
     // glDrawArrays(GL_TRIANGLES, 0, 9);
-    glDrawElements(GL_TRIANGLES,21,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
+    glDrawElements(GL_TRIANGLES,18,GL_UNSIGNED_SHORT,reinterpret_cast<GLvoid*>(0));
     glBindVertexArray(0);
 }
