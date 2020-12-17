@@ -38,13 +38,13 @@ void SimpleShapeApplication::init() {
 
 
     std::vector<GLfloat> vertices = {
-            0, 1, 0, 0.3f, 0.5f, 0.1f,
-            0, 0, 0, 0.3f, 0.5f, 0.1f,
             1, 0, 0, 0.3f, 0.5f, 0.1f,
+            0, 0, 0, 0.3f, 0.5f, 0.1f,
+            0, 1, 0, 0.3f, 0.5f, 0.1f,
 
-            0, 1, 0, 0.8f, 0.5f, 0.3f,
-            1, 0, 0, 0.8f, 0.5f, 0.3f,
             1, 1, 0, 0.8f, 0.5f, 0.3f,
+            1, 0, 0, 0.8f, 0.5f, 0.3f,
+            0, 1, 0, 0.8f, 0.5f, 0.3f,
 
             0, 1, 0, 0.0f, 0.5f, 0.3f,
             0, 0, 0, 0.0f, 0.5f, 0.3f,
@@ -121,8 +121,8 @@ void SimpleShapeApplication::init() {
     glBindBuffer(GL_UNIFORM_BUFFER,u_pvm_buffer_);
     glBufferData(GL_UNIFORM_BUFFER,2*sizeof(glm::mat4), nullptr,GL_STATIC_DRAW);
 
-    glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(glm::mat4),&P_[0]);
-    glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4),sizeof(glm::mat4),&V_[0]);
+    //glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(glm::mat4),&P_[0]);
+    //glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4),sizeof(glm::mat4),&V_[0]);
 
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     glBindBufferBase(GL_UNIFORM_BUFFER,1,u_pvm_buffer_);
