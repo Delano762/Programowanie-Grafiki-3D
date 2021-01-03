@@ -15,6 +15,8 @@
 #include "glad/glad.h"
 #include "camera.h"
 #include "camera_controller.h"
+#include "pyramid.h"
+#include <chrono>
 
 class SimpleShapeApplication : public xe::Application {
 public:
@@ -46,6 +48,14 @@ public:
 
     void framebuffer_resize_callback(int w, int h) override;
     void scroll_callback(double xoffset, double yoffset) override;
+
+    Pyramid* pyramid;
+
+    std::chrono::steady_clock::time_point start_;
+
+    float rotation_period;
+
+    glm::mat4 PVM;
 
 private:
     GLuint vao_;
