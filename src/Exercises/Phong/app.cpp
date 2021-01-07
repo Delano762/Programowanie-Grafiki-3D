@@ -54,7 +54,7 @@ void SimpleShapeApplication::init() {
     int w, h;
     std::tie(w, h) = frame_buffer_size();
 
-    position=glm::vec4(0.0f,0.0f,1.0f,1.0f);
+    position=glm::vec4(0.0f,1.0f,0.0f,1.0f);
     light.position=position;
 
     light.a = glm::vec4(1.0f, 0.0f, 1.0f, 0.0f);
@@ -66,7 +66,7 @@ void SimpleShapeApplication::init() {
     set_controller(new CameraController(camera()));
 
     camera_->perspective(glm::pi<float>()/4.0, (float)w/h, 0.1f, 100.0f);
-    camera_->look_at(glm::vec3(0.0f, 5.0f, 0.0f),
+    camera_->look_at(glm::vec3(0.0f, 4.0f, 0.0f),
                      glm::vec3(0.0f, 0.0f, 0.0f),
                      glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -116,7 +116,7 @@ void SimpleShapeApplication::frame() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     P = camera_->projection();
-    VM = M*camera()->view();
+    VM = camera()->view()*M;
     auto R = glm::mat3(VM);
     N = glm::transpose(glm::inverse(R));
     light.position=VM*position;
