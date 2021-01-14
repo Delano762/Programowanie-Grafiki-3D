@@ -108,18 +108,18 @@ void SimpleShapeApplication::framebuffer_resize_callback(int w, int h) {
 
 void SimpleShapeApplication::frame() {
 
+    P = camera_->projection();
+    VM = camera()->view()*M;
+    auto R = glm::mat3(VM);
+    N = glm::transpose(glm::inverse(R));
+    light.position=VM*position;
+
     glBindBuffer(GL_UNIFORM_BUFFER, u_light_buffer_);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4), &light.position);
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), sizeof(glm::vec4), &light.color);
     glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(glm::vec4), &light.a);
     glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec4), sizeof(glm::vec3), &light.ambient);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-    P = camera_->projection();
-    VM = camera()->view()*M;
-    auto R = glm::mat3(VM);
-    N = glm::transpose(glm::inverse(R));
-    light.position=VM*position;
 
     quad->draw(u_pvm_buffer_,P,VM,N);
 }
